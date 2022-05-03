@@ -1,11 +1,12 @@
 package main
 
 import (
+	"crmgo/library"
 	"crmgo/manifest"
 )
 
 type ModuleInterface interface {
-	Init(restData string) string
+	Init(restData string) (int, string, []library.Data)
 }
 
 func GetModule(moduleName string) ModuleInterface {

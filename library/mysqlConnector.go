@@ -12,7 +12,7 @@ func (t *MysqlConnector) GetConnect(user string, password string, dbName string)
 
 	db, err := sql.Open("mysql", user+":"+password+"@tcp(localhost:3306)/"+dbName)
 	if err != nil {
-		panic(err)
+		Exception(400, "MysqlConnector: MySQL connection error.", string(err.Error()))
 	}
 
 	return db
