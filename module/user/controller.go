@@ -2,6 +2,9 @@ package user
 
 import (
 	"crmgo/library"
+	"encoding/json"
+	"fmt"
+	"strconv"
 
 	"github.com/google/uuid"
 )
@@ -11,21 +14,28 @@ type Controller struct{}
 func (t *Controller) Run(rData []library.Data) (errorCode int, errorMessage string, resultData []library.Data) {
 
 	var lbr library.CrmBean
-	userCollection := []user.UserBean{}
+	user := UserBean{}
+	userCollection := []UserBean{}
 
 	errorCode = 200
 	errorMessage = ""
 
-	whare := []string{
-		"main.login = '" + library.GetVal("id", rData) + "'",
+	beanId := library.GetVal("id", rData)
+
+	bId, err := strconv.Atoi(beanId)
+
+	if err != nil {
+		fmt.Println("is not an integer.")
 	}
 
-	user := user.UserBean{}
-	results := lbr.GetCollection("sys_users", whare, "ORDER BY main.id DESC")
+	results := lbr.GetBean("sys_users", bId)
 
 	for results.Next() {
 		err := results.Scan(user.GetScans()...)
 		userCollection = append(userCollection, user)
+
+		jsonStr, _ := json.Marshal(user)
+		fmt.Println(string(jsonStr))
 
 		if err != nil {
 			library.Exception(400, "Main: Json parsing error.", string(err.Error()))
@@ -40,4 +50,5 @@ func (t *Controller) Run(rData []library.Data) (errorCode int, errorMessage stri
 	resultData = append(resultData, library.Data{Name: "token", Value: uuid.New().String()})
 
 	return errorCode, errorMessage, resultData
+
 }

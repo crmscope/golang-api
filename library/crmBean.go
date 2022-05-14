@@ -3,6 +3,7 @@ package library
 import (
 	"database/sql"
 	"strings"
+	"strconv"
 )
 
 type CrmBean struct {
@@ -39,7 +40,7 @@ func (t *CrmBean) GetBean(beanName string, id int) *sql.Rows {
 	results, err := t.db.Query("SELECT main.*, attr.*  " +
 		"FROM " + beanName + " as main " +
 		"INNER JOIN " + beanName + "_attr attr ON attr.id_users = main.id AND main.deleted != 1 " +
-		"WHERE main.id = ".id)
+		"WHERE main.id = " + strconv.Itoa(id))
 
 	if err != nil {
 		Exception(400, "CrmBean: SQL query error.", string(err.Error()))

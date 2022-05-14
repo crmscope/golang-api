@@ -28,7 +28,7 @@ class testApi {
             "rest_data" => json_encode([
                 [
                     "Name" => "id",
-                    "Value"   => 1
+                    "Value"   => "1"
                 ]
             ]),
         ];
@@ -72,6 +72,7 @@ class testApi {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         $response = curl_exec($ch);
+        echo "\n Response: " . $response . "\n";
         curl_close($ch);
         return $response;
     }

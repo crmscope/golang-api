@@ -2,6 +2,7 @@ package user
 
 import (
 	"database/sql"
+	"crmgo/library"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -43,3 +44,29 @@ func (t *UserBean) GetScans() []interface{} {
 		&t.Phone,
 	}
 }
+
+func (t *UserBean) GetJson() jsonMap []library.Data {
+	
+	jsonMap[0].Name
+	
+	
+	jsonMap[0]["namr"]
+	
+	
+	jsonMap["Id"] = t.Id;
+	jsonMap["Id_module"] = t.Id_module,
+	jsonMap["Login"] = t.Login,
+	jsonMap["Password"] = t.Password,
+	jsonMap["Date_entered"] = t.Date_entered,
+	jsonMap["Date_modified"] = t.Date_modified,
+	jsonMap["Deleted"] = t.Deleted,
+	jsonMap["Created_by"] = t.Created_by,
+	jsonMap["Assigned_user_id"] = t.Assigned_user_id,
+	jsonMap["Modified_user_id"] = t.Modified_user_id,
+	jsonMap["Id_users"] = t.Id_users,
+	jsonMap["Id_language"] = t.Id_language,
+	jsonMap["Name"] = t.Name,
+	jsonMap["Description"] = t.Description,
+	jsonMap["Phone"] = t.Phone,
+}
+
