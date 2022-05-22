@@ -1,9 +1,9 @@
 package manifest
 
 import (
-	"crmgo/library"
-	"crmgo/module/auth"
 	"encoding/json"
+	"tackle-api/library"
+	"tackle-api/module/auth"
 )
 
 type ManifestAuth struct{}

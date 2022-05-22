@@ -1,10 +1,9 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
+--
+-- Структура таблицы `language`
+--
 
 CREATE TABLE `language` (
-  `id` int(32) NOT NULL,
+  `id` char(36) NOT NULL,
   `date_entered` datetime DEFAULT NULL,
   `date_modified` datetime DEFAULT NULL,
   `deleted` tinyint(1) DEFAULT 0,
@@ -12,107 +11,93 @@ CREATE TABLE `language` (
   `title` char(32) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `language`
+--
 
 INSERT INTO `language` (`id`, `date_entered`, `date_modified`, `deleted`, `key`, `title`) VALUES
-(1, '2022-03-06 19:09:10', '2022-03-06 19:09:10', 0, 'ru', 'Русский'),
-(2, '2022-03-06 19:09:10', '2022-03-06 19:09:10', 0, 'en', 'Английский');
+('6e22e7c2-d619-11ec-9d64-0242ac120002', '2022-05-17 22:42:22', '2022-05-17 22:42:22', 0, 'ru', 'Russian'),
+('7b8fb69c-d619-11ec-9d64-0242ac120002', '2022-05-17 22:42:22', '2022-05-17 22:42:22', 0, 'en', 'English');
 
+-- --------------------------------------------------------
 
-CREATE TABLE `module` (
-  `id` int(32) NOT NULL,
-  `date_entered` datetime DEFAULT NULL,
-  `date_modified` datetime DEFAULT NULL,
-  `deleted` tinyint(1) DEFAULT 0,
-  `key` char(32) DEFAULT NULL,
-  `language_default_id` int(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- Структура таблицы `user`
+--
 
-
-INSERT INTO `module` (`id`, `date_entered`, `date_modified`, `deleted`, `key`, `language_default_id`) VALUES
-(1, '2022-03-06 19:08:42', '2022-03-06 19:08:42', 0, 'user', 2);
-
-
-CREATE TABLE `module_description` (
-  `id_language` int(32) NOT NULL,
-  `id_module` int(32) NOT NULL,
-  `title` char(32) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-INSERT INTO `module_description` (`id_language`, `id_module`, `title`, `description`) VALUES
-(1, 1, 'Пользователи', NULL),
-(2, 1, 'user', NULL);
-
-
-CREATE TABLE `sys_users` (
-  `id` int(32) NOT NULL,
-  `id_module` int(32) DEFAULT NULL,
+CREATE TABLE `user` (
+  `id` char(36) NOT NULL,
+  `id_module` char(36) DEFAULT NULL,
   `login` char(36) DEFAULT NULL,
   `password` char(36) DEFAULT NULL,
   `date_entered` datetime DEFAULT NULL,
   `date_modified` datetime DEFAULT NULL,
   `deleted` tinyint(1) DEFAULT 0,
   `created_by` char(36) DEFAULT NULL,
-  `assigned_user_id` int(32) DEFAULT NULL,
-  `modified_user_id` int(32) DEFAULT NULL
+  `assigned_user_id` char(36) DEFAULT NULL,
+  `modified_user_id` char(36) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `user`
+--
 
-INSERT INTO `sys_users` (`id`, `id_module`, `login`, `password`, `date_entered`, `date_modified`, `deleted`, `created_by`, `assigned_user_id`, `modified_user_id`) VALUES
-(1, NULL, 'alex', '81dc9bdb52d04dc20036dbd8313ed055', '2022-03-07 21:51:02', '2022-03-07 21:51:02', 0, NULL, NULL, NULL),
-(2, 1, 'user2', '5f1b22728264c8fc163d99dfe826b9e8', '2022-04-04 23:31:54', '2022-04-04 23:31:54', 0, '1', 1, 1);
+INSERT INTO `user` (`id`, `id_module`, `login`, `password`, `date_entered`, `date_modified`, `deleted`, `created_by`, `assigned_user_id`, `modified_user_id`) VALUES
+('a6da9bc8-d619-11ec-9d64-0242ac120002', 'a6da9bc8-d619-11ec-9d64-0242ac120002', 'alex', '81dc9bdb52d04dc20036dbd8313ed055', '2022-05-17 22:43:34', '2022-05-17 22:43:34', 0, NULL, NULL, NULL);
 
+-- --------------------------------------------------------
 
-CREATE TABLE `sys_users_attr` (
-  `id_users` int(32) NOT NULL,
-  `id_language` int(32) DEFAULT NULL,
+--
+-- Структура таблицы `user_attr`
+--
+
+CREATE TABLE `user_attr` (
+  `id_user` char(36) NOT NULL,
+  `id_language` char(36) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `phone` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `user_attr`
+--
 
-INSERT INTO `sys_users_attr` (`id_users`, `id_language`, `name`, `description`, `phone`) VALUES
-(1, 1, 'Alexender', 'Other user', '54353535');
+INSERT INTO `user_attr` (`id_user`, `id_language`, `name`, `description`, `phone`) VALUES
+('a6da9bc8-d619-11ec-9d64-0242ac120002', '6e22e7c2-d619-11ec-9d64-0242ac120002', 'Alex', 'Alex description', '123456789'),
+('a6da9bc8-d619-11ec-9d64-0242ac120002', '7b8fb69c-d619-11ec-9d64-0242ac120002', 'Jon', 'Jon description', '987654321');
 
+--
+-- Индексы сохранённых таблиц
+--
+
+--
+-- Индексы таблицы `language`
+--
 ALTER TABLE `language`
   ADD PRIMARY KEY (`id`);
 
-
-ALTER TABLE `module`
+--
+-- Индексы таблицы `user`
+--
+ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
+--
+-- Индексы таблицы `user_attr`
+--
+ALTER TABLE `user_attr`
+  ADD PRIMARY KEY (`id_user`,`id_language`),
+  ADD KEY `user_attr-language` (`id_language`);
 
-ALTER TABLE `module_description`
-  ADD PRIMARY KEY (`id_language`,`id_module`),
-  ADD KEY `module_description_ibfk_1` (`id_module`);
+--
+-- Ограничения внешнего ключа сохраненных таблиц
+--
 
-ALTER TABLE `sys_users`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `sys_users_attr`
-  ADD PRIMARY KEY (`id_users`),
-  ADD KEY `sys_users_attr_langua_1` (`id_language`);
-
-ALTER TABLE `language`
-  MODIFY `id` int(32) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
-ALTER TABLE `module`
-  MODIFY `id` int(32) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
-ALTER TABLE `sys_users`
-  MODIFY `id` int(32) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
-ALTER TABLE `module_description`
-  ADD CONSTRAINT `module_description_ibfk_1` FOREIGN KEY (`id_module`) REFERENCES `module` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `module_description_language_ibfk_1` FOREIGN KEY (`id_language`) REFERENCES `language` (`id`) ON DELETE CASCADE;
-
-ALTER TABLE `sys_users`
-  ADD CONSTRAINT `sys_users_module_ibfk_1` FOREIGN KEY (`id_module`) REFERENCES `module` (`id`) ON DELETE CASCADE;
-
-ALTER TABLE `sys_users_attr`
-  ADD CONSTRAINT `sys_users_attr_ibfk_1` FOREIGN KEY (`id_users`) REFERENCES `sys_users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `sys_users_attr_langua_1` FOREIGN KEY (`id_language`) REFERENCES `language` (`id`) ON DELETE CASCADE;
+--
+-- Ограничения внешнего ключа таблицы `user_attr`
+--
+ALTER TABLE `user_attr`
+  ADD CONSTRAINT `user_attr-language` FOREIGN KEY (`id_language`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_attr-user` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
-

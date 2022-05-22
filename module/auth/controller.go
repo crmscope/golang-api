@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"crmgo/library"
-	"crmgo/module/user"
+	"tackle-api/library"
+	"tackle-api/module/user"
 
 	"github.com/google/uuid"
 )
@@ -11,7 +11,7 @@ type Controller struct{}
 
 func (t *Controller) Run(rData []library.Data) (errorCode int, errorMessage string, resultData []library.Data) {
 
-	var lbr library.CrmBean
+	var lbr library.TackleBean
 	userCollection := []user.UserBean{}
 
 	errorCode = 200
@@ -23,10 +23,11 @@ func (t *Controller) Run(rData []library.Data) (errorCode int, errorMessage stri
 	}
 
 	user := user.UserBean{}
-	results := lbr.GetCollection("sys_users", whare, "ORDER BY main.id DESC")
+
+	results := lbr.GetCollection("user", whare, "ORDER BY main.id DESC")
 
 	for results.Next() {
-		err := results.Scan(user.GetScans()...)
+		err := results.Scan(user.GetPointers()...)
 		userCollection = append(userCollection, user)
 
 		if err != nil {

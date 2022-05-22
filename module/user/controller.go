@@ -1,10 +1,8 @@
 package user
 
 import (
-	"crmgo/library"
-	"encoding/json"
-	"fmt"
-	"strconv"
+	//"encoding/json"
+	"tackle-api/library"
 
 	"github.com/google/uuid"
 )
@@ -13,7 +11,7 @@ type Controller struct{}
 
 func (t *Controller) Run(rData []library.Data) (errorCode int, errorMessage string, resultData []library.Data) {
 
-	var lbr library.CrmBean
+	var lbr library.TackleBean
 	user := UserBean{}
 	userCollection := []UserBean{}
 
@@ -22,20 +20,12 @@ func (t *Controller) Run(rData []library.Data) (errorCode int, errorMessage stri
 
 	beanId := library.GetVal("id", rData)
 
-	bId, err := strconv.Atoi(beanId)
-
-	if err != nil {
-		fmt.Println("is not an integer.")
-	}
-
-	results := lbr.GetBean("sys_users", bId)
+	results := lbr.GetBean("user", beanId)
 
 	for results.Next() {
-		err := results.Scan(user.GetScans()...)
+		err := results.Scan(user.GetPointers()...)
 		userCollection = append(userCollection, user)
-
-		jsonStr, _ := json.Marshal(user)
-		fmt.Println(string(jsonStr))
+		//jsonStr, _ := json.Marshal(user)
 
 		if err != nil {
 			library.Exception(400, "Main: Json parsing error.", string(err.Error()))

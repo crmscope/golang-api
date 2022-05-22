@@ -28,7 +28,7 @@ class testApi {
             "rest_data" => json_encode([
                 [
                     "Name" => "id",
-                    "Value"   => "1"
+                    "Value" => "a6da9bc8-d619-11ec-9d64-0242ac120002"
                 ]
             ]),
         ];
@@ -78,10 +78,14 @@ class testApi {
     }
 }
 
-
-$test = new testApi($url);
-$test->auth();
-if ($test->isAuth()) {
-    $test->getUserById();
+while (true) {
+    $test = new testApi($url);
+    $test->auth();
+    if ($test->isAuth()) {
+        $test->getUserById();
+    }
+    usleep(1000);
 }
+
+
 

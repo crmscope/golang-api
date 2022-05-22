@@ -1,4 +1,4 @@
-module crmgo
+module tackle-api
 
 go 1.17
 

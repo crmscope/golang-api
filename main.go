@@ -1,11 +1,11 @@
 package main
 
 import (
-	"crmgo/library"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
+	"tackle-api/library"
 )
 
 func response(errorCode int, errorMessage string, resultData []library.Data) string {
@@ -26,11 +26,16 @@ func response(errorCode int, errorMessage string, resultData []library.Data) str
 	return string(jsonStr)
 }
 
-func apiAction(w http.ResponseWriter, r *http.Request) {
+func rutines(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		module := GetModule(r.FormValue("module"))
 		fmt.Fprint(w, response(module.Init(r.FormValue("rest_data"))))
+		module = nil
 	}
+}
+
+func apiAction(w http.ResponseWriter, r *http.Request) {
+	rutines(w, r)
 }
 
 func main() {

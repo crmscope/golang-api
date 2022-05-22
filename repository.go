@@ -1,8 +1,8 @@
 package main
 
 import (
-	"crmgo/library"
-	"crmgo/manifest"
+	"tackle-api/library"
+	"tackle-api/manifest"
 )
 
 type ModuleInterface interface {
